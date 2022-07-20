@@ -1,23 +1,53 @@
-version: '3.3'
+version: '3.9'
+
 services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: "MySQLRootPassword"
+      MYSQL_PASS: "MySQLUserPassword"
+      MYSQL_DATABASE: pep
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-pMySQLRootPassword"]
+      timeout: 2s
+      interval: 5s
+    ports:
+      - "3306:3306"
+    networks:
+      - pep
+    volumes:
+      - pepdbdata:/var/lib/mysql
+  opas-api:
+    build:
+      context: "."
+    depends_on:
+      - db
+      - solr
+    volumes:
+      - ./app:/app
+    networks:
+      - pep
   solr:
-      image: solr:latest
-      environment:
-          SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
-      volumes:
-          - ./solrCoreConfigurations/data:/var/solr/data/
-      ports:
-          - "8983:8983"
-      command: solr-foreground
-      entrypoint: "docker-entrypoint.sh"
-      restart: always
+    image: solr:latest
+    environment:
+      SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+    volumes:
+      - ./solrCoreConfigurations/data:/var/solr/data/
+    ports:
+      - "8983:8983"
+    command: solr-foreground
+    entrypoint: "docker-entrypoint.sh"
+    restart: always
+    networks:
+      - pep
 
-
-# Names our volume
+networks:
+  pep:
+    driver: bridge
 volumes:
+  pepdbdata:
   solrdata:
       driver: local
       driver_opts:
           type: bind
           device: ./solrCoreConfigurations/data
-
