@@ -3,18 +3,18 @@
 # Updated 2022-07-15 Pydantic
 
 bcrypt==3.2.0
-certifi==2020.6.20
+certifi==2024.7.4
 cffi==1.14.2
 chardet==3.0.4
-cryptography==3.3.2
-idna==2.10
-paramiko==2.10.1
+cryptography==43.0.1
+idna==3.7
+paramiko==3.4.0
 pycparser==2.20
-pydantic==1.9.1
-PyMySQL==0.10.0
+pydantic==1.10.13
+PyMySQL==1.1.1
 PyNaCl==1.4.0
 pysolr==3.9.0
-requests==2.24.0
+requests==2.32.2
 six==1.15.0
 sshtunnel==0.1.5
 urllib3>=1.26.5
